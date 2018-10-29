@@ -1,0 +1,256 @@
+//Declare Global Variable
+
+var manpower, totalBusinessReturn, netofLFR, addManpower, businessReturnAdditional, lfrAmount;
+var siteType = "A";
+var msQty = 60;
+var hsdQty = 110;
+
+//function to calculate the LFR Amount
+
+lfrAmount = (siteType === "A") ? (472.77*msQty) + (393.97*hsdQty) : (233.45*msQty) + (194.54*hsdQty);
+
+//Declare a Business Return Object
+
+var businessReturn = {
+	ms: 201.77,
+	hsd: 149.46
+}
+
+//Calculate the LFR and Business Returns
+
+var fixedBusinessReturn = {
+	lessThen25: 12000,
+	lessThen50: 20000,
+	lessThen100: 24000,
+	lessThen150: 26000,
+	lessThen170: 27500
+};
+
+//Declare a Object for Fixed Rate Business Return
+
+var fixedRateBusinessReturn = {
+
+	ms: 2674.74,
+	hsd: 2031.38
+};
+
+//Declare the Variable Rate
+
+var variableRate = {
+	ms: 0.00859,
+	hsd: 0.00257
+}
+
+//Declare an Object to Declare an Invoice Value Per KL
+
+var invoiceValuePerKL = {
+	ms: 79185,
+	hsd: 72432
+};
+
+//Declare an Object - LFR for A Site
+
+var lfrASite = {
+	lfrOnMS: (() =>
+	{
+		return ((369.35 * 0.28) + 369.35);
+	})(),
+	lfrOnHSD: (() =>
+	{
+		return ((307.79 * 0.28) + 307.79);
+	})()
+}
+
+//Declare an Object - LFR for B Site
+
+var lfrBSite = {
+	lfrOnMS: (() =>
+	{
+		return ((182.38 * 0.28) + 182.38);
+	})(),
+	lfrOnHSD: (() =>
+	{
+		return ((151.99 * 0.28) + 151.99);
+	})()
+}
+
+//Calculation of LFR Rate for A siteType
+
+var omcRecoveryThroughLFR = {
+
+	msCalcforSite: (function ()
+	{
+		let fixedThroughInvoice = fixedRateBusinessReturn.ms;
+		let variableThroughInvoice = invoiceValuePerKL.ms * variableRate.ms;
+		return fixedThroughInvoice + variableThroughInvoice;
+	})(),
+
+	hsdCalcforSite: (function ()
+	{
+		let fixedThroughInvoice = fixedRateBusinessReturn.hsd;
+		let variableThroughInvoice = invoiceValuePerKL.hsd * variableRate.hsd;
+		return fixedThroughInvoice + variableThroughInvoice;
+	})(),
+};
+
+
+//Calculate the Dealer Commision
+
+(function dealerCommission(site)
+{
+	let lfrAmountMS, lfrAmountHSD, netLFRAmount;
+	if (site === "A")
+	{
+		lfrAmountMS = msQty * lfrASite.lfrOnMS;
+		lfrAmountHSD = hsdQty * lfrASite.lfrOnHSD;
+	}
+	else if (site === "B")
+	{
+		lfrAmountMS = msQty * lfrBSite.lfrOnMS;
+		lfrAmountHSD = hsdQty * lfrBSite.lfrOnHSD;
+	}
+	return lfrAmountHSD + lfrAmountMS;
+
+})();
+
+
+//function to calculate the fixed dealer commision
+
+function fixedDealerCalc()
+{
+	return (msQty * (fixedRateBusinessReturn.ms - businessReturn.ms)) + (hsdQty * (fixedRateBusinessReturn.hsd - businessReturn.hsd));
+};
+
+//function to calculate the Variable dealer commision
+
+function variableDealerCalc()
+{
+	return (msQty * invoiceValuePerKL.ms * variableRate.ms) + (hsdQty * invoiceValuePerKL.hsd * variableRate.hsd);
+};
+
+//function to calculate Additional Manpower and Total Business Return
+
+(function manpowerAndTotalBusinessReturnCalc()
+{
+
+	let temp = msQty + hsdQty;
+
+	if (temp <= 400)
+	{
+		manpower = (msQty * 379.67) + (hsdQty * 281.23);
+	}
+	else if (temp > 400 && temp <= 600)
+	{
+		manpower = (msQty * 340.19) + (hsdQty * 251.99);
+	}
+	else if (temp > 600 && temp <= 800)
+	{
+		manpower = (msQty * 300.72) + (hsdQty * 222.75);
+	}
+	else if (temp > 800 && temp <= 1000)
+	{
+		manpower = (msQty * 261.24) + (hsdQty * 193.51);
+	}
+	else if (temp > 1000 && temp <= 1200)
+	{
+		manpower = (msQty * 221.77) + (hsdQty * 164.27);
+	}
+	else if (temp > 1200 && temp <= 1400)
+	{
+		manpower = (msQty * 182.29) + (hsdQty * 135.03);
+	}
+	else if (temp > 1400 && temp <= 1600)
+	{
+		manpower = (msQty * 142.82) + (hsdQty * 105.79);
+	}
+	else if (temp > 1600 && temp <= 1800)
+	{
+		manpower = (msQty * 103.34) + (hsdQty * 76.55);
+	}
+	else if (temp > 1800 && temp <= 2000)
+	{
+		manpower = (msQty * 78.95) + (hsdQty * 58.48);
+	}
+	else if (temp > 2000 && temp <= 2200)
+	{
+		manpower = (msQty * 52.63) + (hsdQty * 38.99);
+	}
+	else if (temp > 2200 && temp <= 2400)
+	{
+		manpower = (msQty * 39.47) + (hsdQty * 29.24);
+	}
+	else if (temp > 2400 && temp <= 2600)
+	{
+		manpower = (msQty * 26.32) + (hsdQty * 19.49);
+	}
+	else if (temp > 2600 && temp <= 2800)
+	{
+		manpower = (msQty * 13.16) + (hsdQty * 9.75);
+	}
+	else if (temp > 2800)
+	{
+		manpower = (msQty * 0) + (hsdQty * 0);
+	}
+
+	//calculate the total business return
+
+	if (temp < 12)
+	{
+		totalBusinessReturn = (msQty * businessReturn.ms) + (hsdQty * businessReturn.hsd);
+	}
+	else if (temp > 12 && temp <= 25)
+	{
+		totalBusinessReturn = Math.max(12000, (msQty * businessReturn.ms) + (hsdQty * businessReturn.hsd));
+	}
+	else if (temp > 25 && temp <= 50)
+	{
+		totalBusinessReturn = Math.max(20000, (msQty * businessReturn.ms) + (hsdQty * businessReturn.hsd));
+	}
+	else if (temp > 50 && temp <= 100)
+	{
+		totalBusinessReturn = Math.max(24000, (msQty * businessReturn.ms) + (hsdQty * businessReturn.hsd));
+	}
+	else if (temp > 100 && temp <= 150)
+	{
+		totalBusinessReturn = Math.max(26000, (msQty * businessReturn.ms) + (hsdQty * businessReturn.hsd));
+	}
+	else if (temp > 150 && temp <= 170)
+	{
+		totalBusinessReturn = Math.max(27500, (msQty * businessReturn.ms) + (hsdQty * businessReturn.hsd));
+	}
+	else if (temp > 170)
+	{
+		totalBusinessReturn = (msQty * businessReturn.ms) + (hsdQty * businessReturn.hsd);
+	}
+	netofLFR = (manpower + totalBusinessReturn) + (fixedDealerCalc() + variableDealerCalc()) - (omcRecoveryThroughLFR.msCalcforSite + omcRecoveryThroughLFR.hsdCalcforSite);
+})();
+
+//function to calculate the Business Return
+
+(function businessReturnCalc()
+{
+	let netDealerCommisionThroughInvoiceForMS, netDealerCommisionThroughInvoiceForHSD, roDifferentialMArginThroughCreditNote, temp;
+	if (siteType === "A")
+	{
+		netDealerCommisionThroughInvoiceForMS = omcRecoveryThroughLFR.msCalcforSite - lfrASite.lfrOnMS;
+		netDealerCommisionThroughInvoiceForHSD = omcRecoveryThroughLFR.hsdCalcforSite - lfrASite.lfrOnHSD;
+		temp = (manpower + totalBusinessReturn) + (fixedDealerCalc() + variableDealerCalc()) -
+			((msQty * lfrASite.lfrOnMS) + (hsdQty * lfrASite.lfrOnHSD));
+		roDifferentialMArginThroughCreditNote = temp - ((msQty * netDealerCommisionThroughInvoiceForMS) + (hsdQty * netDealerCommisionThroughInvoiceForHSD));
+		addManpower = manpower;
+		businessReturnAdditional = roDifferentialMArginThroughCreditNote - addManpower;
+		console.log(addManpower.toFixed(2) + "|" + businessReturnAdditional.toFixed(2) + "|" + roDifferentialMArginThroughCreditNote.toFixed(2) + "|" + lfrAmount.toFixed(2));
+	}
+	else
+	{
+		netDealerCommisionThroughInvoiceForMS = omcRecoveryThroughLFR.msCalcforSite - lfrBSite.lfrOnMS;
+		netDealerCommisionThroughInvoiceForHSD = omcRecoveryThroughLFR.hsdCalcforSite - lfrBSite.lfrOnHSD;
+		temp = (manpower + totalBusinessReturn) + (fixedDealerCalc() + variableDealerCalc()) -
+			((msQty * lfrBSite.lfrOnMS) + (hsdQty * lfrBSite.lfrOnHSD));
+		roDifferentialMArginThroughCreditNote = temp - ((msQty * netDealerCommisionThroughInvoiceForMS) + (hsdQty * netDealerCommisionThroughInvoiceForHSD));
+		addManpower = manpower;
+		businessReturnAdditional = roDifferentialMArginThroughCreditNote - addManpower;
+		console.log(addManpower.toFixed(2) + "|" + businessReturnAdditional.toFixed(2) + "|" + roDifferentialMArginThroughCreditNote.toFixed(2) + "|" + lfrAmount.toFixed(2));
+	}
+})();
+
