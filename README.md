@@ -2,5 +2,9 @@
 LFR and Business Return Calculator
 
 Version 4.0
-- Fixed the TDS Calculation ( Now TDS will be calculated on LFR Amount exclusive of GST)
-- Updated to ECMA 6
+
+-Updated the code to ECMA 6
+-Added Function to Calculate the TDS Amount
+-Fixed TDS Calculation
+-TDS Calculation will done on LFR Amount, exclusive of GST (Earlier the Calculation as done on inclusive of GST which is wrong)
+-Code Clean Up and Performace Improvements
